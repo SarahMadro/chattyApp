@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 // import Message from './Message.jsx';
 
 export class ChatBar extends Component {
-  constructor(prop) {
-    super(prop);
-    this.state = {
-      currentUser: 'sarah'
-    }
-  }
+
 
   onKeyDown = (event) => {
     if (event.key === 'Enter') {

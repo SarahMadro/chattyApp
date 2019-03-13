@@ -12,12 +12,6 @@ class App extends Component {
       name: { username: "anonymous" },
       messages: [
         {
-          type: '',
-          id: '',
-          content: '',
-          username
-        },
-        {
           type: "incomingMessage",
           id: 1,
           content: "I won't be impressed with technology until I can download food.",
@@ -68,24 +62,25 @@ class App extends Component {
   };
 
   addMessage = (value) => {
+    console.log('value', value);
     const newMessage = {
       id: this.generateRandomId(),
       username: 'sarah',
-      content: 'lskdjflsdjfdl'
+      content: value
     };
     this.setState({ messages: this.state.messages.concat(newMessage) })
 
   }
 
   render() {
+    const { name } = this.state;
+    console.log('state', this.state)
     return (
 
       <div>
         <NavBar />
 
         <MessageList messages={this.state.messages} />
-
-        <Message />
 
         <ChatBar currentUser={this.state.name} addMessage={this.addMessage} />
       </div>
