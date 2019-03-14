@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ChatBar from './ChatBar.jsx';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
+import { each } from 'bluebird';
 const uuidv4 = require('uuid/v4');
 
 class App extends Component {
@@ -9,23 +10,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: { username: 'sarah' },
+      name: { username: '' },
       currentContent: '',
+      currentUser: { username: '' },
       messages: []
     };
     this.addMessage = this.addMessage.bind(this);
-  };
-
-  generateRandomId() {
-    let r = Math.random().toString(36).substring(7);
-    return r;
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   };
 
   addMessage = (value) => {
     console.log('value', value);
     const newMessage = {
       id: uuidv4(),
-      username: '',
+      username: name,
       content: value
     };
     this.socket.send(JSON.stringify(newMessage));
@@ -36,13 +35,21 @@ class App extends Component {
 
     this.socket = new WebSocket('ws://localhost:3001')
 
-    this.socket.addEventListener('message', (message) => {
-      this.socket.onmessage = ((event) => {
-        const parsedData = JSON.parse(event.data);
-        console.log(parsedData);
-      })
+    this.socket.onmessage = ((event) => {
+      const parsedData = JSON.parse(event.data);
+      console.log(parsedData);
+
+      this.setState({ messages: this.state.messages.concat({ ...parsedData, id: uuidv4() }) })
     })
   };
+
+  handleChange(event) {
+    this.setState({ currentUser: { username: event.target.value } })
+  };
+
+  handleSubmit(event) {
+    this.setState({ currentContent: event.target.value })
+  }
 
   render() {
     return (
