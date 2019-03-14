@@ -1,57 +1,17 @@
 import React, { Component } from 'react';
 import ChatBar from './ChatBar.jsx';
-import Message from './Message.jsx';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
+const uuidv4 = require('uuid/v4');
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      name: { username: "anonymous" },
-      messages: [
-        {
-          type: "incomingMessage",
-          id: 1,
-          content: "I won't be impressed with technology until I can download food.",
-          username: "Anonymous1"
-        },
-        {
-          type: "incomingNotification",
-          id: 2,
-          content: "Anonymous1 changed their name to nomnom",
-        },
-        {
-          type: "incomingMessage",
-          id: 3,
-          content: "I wouldn't want to download Kraft Dinner. I'd be scared of cheese packet loss.",
-          username: "Anonymous2"
-        },
-        {
-          type: "incomingMessage",
-          id: 4,
-          content: "...",
-          username: "nomnom"
-        },
-        {
-          type: "incomingMessage",
-          id: 5,
-          content: "I'd love to download a fried egg, but I'm afraid encryption would scramble it",
-          username: "Anonymous2"
-        },
-        {
-          type: "incomingMessage",
-          id: 6,
-          content: "This isn't funny. You're not funny",
-          username: "nomnom"
-        },
-        {
-          type: "incomingNotification",
-          id: 7,
-          content: "Anonymous2 changed their name to NotFunny",
-        },
-      ]
+      name: { username: 'sarah' },
+      currentContent: '',
+      messages: []
     };
     this.addMessage = this.addMessage.bind(this);
   };
@@ -64,19 +24,28 @@ class App extends Component {
   addMessage = (value) => {
     console.log('value', value);
     const newMessage = {
-      id: this.generateRandomId(),
-      username: 'sarah',
+      id: uuidv4(),
+      username: '',
       content: value
     };
+    this.socket.send(JSON.stringify(newMessage));
     this.setState({ messages: this.state.messages.concat(newMessage) })
-
   }
 
-  render() {
-    const { name } = this.state;
-    console.log('state', this.state)
-    return (
+  componentDidMount() {
 
+    this.socket = new WebSocket('ws://localhost:3001')
+
+    this.socket.addEventListener('message', (message) => {
+      this.socket.onmessage = ((event) => {
+        const parsedData = JSON.parse(event.data);
+        console.log(parsedData);
+      })
+    })
+  };
+
+  render() {
+    return (
       <div>
         <NavBar />
 
@@ -84,7 +53,6 @@ class App extends Component {
 
         <ChatBar currentUser={this.state.name} addMessage={this.addMessage} />
       </div>
-
     )
   };
 };

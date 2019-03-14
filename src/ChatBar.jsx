@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-// import Message from './Message.jsx';
 
 export class ChatBar extends Component {
 
-
   onKeyDown = (event) => {
     if (event.key === 'Enter') {
-      const newTaskInput = event.target.value;
-      this.props.addMessage(newTaskInput);
+      const newMessage = event.target.value;
+      this.props.addMessage(newMessage);
     }
   }
 
