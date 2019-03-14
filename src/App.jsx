@@ -10,21 +10,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: { username: '' },
-      currentContent: '',
-      currentUser: { username: '' },
+      currentUser: { username: 'Anonymous' },
       messages: []
     };
     this.addMessage = this.addMessage.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   };
 
   addMessage = (value) => {
     console.log('value', value);
     const newMessage = {
       id: uuidv4(),
-      username: name,
+      username: this.state.currentUser.username,
       content: value
     };
     this.socket.send(JSON.stringify(newMessage));
@@ -47,9 +44,6 @@ class App extends Component {
     this.setState({ currentUser: { username: event.target.value } })
   };
 
-  handleSubmit(event) {
-    this.setState({ currentContent: event.target.value })
-  }
 
   render() {
     return (
@@ -58,7 +52,7 @@ class App extends Component {
 
         <MessageList messages={this.state.messages} />
 
-        <ChatBar currentUser={this.state.name} addMessage={this.addMessage} />
+        <ChatBar currentUser={this.state.currentUser.username} addMessage={this.addMessage} handleChange={this.handleChange} />
       </div>
     )
   };
