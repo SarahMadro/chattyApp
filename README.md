@@ -23,11 +23,6 @@ npm start
 open http://localhost:3000
 ```
 
-### Screenshots
-
-!['ChattyApp Demo'] (
-
-
 ### Static Files
 
 You can store static files like images, fonts, etc in the `build` folder.
