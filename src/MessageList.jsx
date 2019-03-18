@@ -7,13 +7,14 @@ class MessageList extends Component {
   }
   render() {
     const messages = this.props.messages.map(msg =>
-      <Message key={msg.id} msg={msg} username={msg.name} />
+      <Message key={msg.id} msg={msg} username={msg.username} />
     )
+
     return (
       <div>
-        {messages}
+        <div> {messages} </div>
       </div>
-    )
+    );
   };
 }
 export default MessageList;

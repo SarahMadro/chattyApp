@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ChatBar from './ChatBar.jsx';
 import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
-import { each } from 'bluebird';
 const uuidv4 = require('uuid/v4');
 
 class App extends Component {
@@ -11,48 +10,81 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: { username: 'Anonymous' },
-      messages: []
+      messages: [],
+      userCount: 0
     };
     this.addMessage = this.addMessage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   };
 
+  //sends message to server
   addMessage = (value) => {
-    console.log('value', value);
     const newMessage = {
       id: uuidv4(),
       username: this.state.currentUser.username,
+      type: 'postMessage',
       content: value
     };
     this.socket.send(JSON.stringify(newMessage));
-    this.setState({ messages: this.state.messages.concat(newMessage) })
   }
 
+  //changes name an sends notification
+  onNameChange = (event) => {
+    if (event.target.value !== this.state.currentUser.username) {
+      const currentName = this.state.currentUser.username;
+      const newName = event.target.value;
+      const userChange = {
+        id: uuidv4(),
+        type: 'postNotification',
+        content: currentName + ' has changed their name to ' + newName
+      };
+      this.socket.send(JSON.stringify(userChange));
+      this.setState({ currentUser: { username: event.target.value } })
+    }
+  }
+
+  handleChange(event) {
+    this.setState({ currentUser: { username: event.target.value } })
+  };
+
+  //recieve messages from server
   componentDidMount() {
 
     this.socket = new WebSocket('ws://localhost:3001')
 
     this.socket.onmessage = ((event) => {
       const parsedData = JSON.parse(event.data);
-      console.log(parsedData);
 
-      this.setState({ messages: this.state.messages.concat({ ...parsedData, id: uuidv4() }) })
+      switch (parsedData.type) {
+
+        //posts messages from users in order
+        case 'postNotification':
+        case 'postMessage':
+          this.setState({ messages: this.state.messages.concat(parsedData) });
+          console.log('POSTMSG', parsedData);
+          break;
+
+        //counts online users
+        case 'countUsers':
+          this.setState({ userCount: parsedData.content });
+          break;
+      }
     })
   };
 
-  handleChange(event) {
-    this.setState({ currentUser: { username: event.target.value } })
-  };
-
-
+  //renders all other components
   render() {
+
+    let { userCount, messages, currentUser } = this.state;
+    let { onNameChange, addMessage, handleChange } = this;
+
     return (
       <div>
-        <NavBar />
+        <NavBar userCount={userCount} />
 
-        <MessageList messages={this.state.messages} />
+        <MessageList messages={messages} />
 
-        <ChatBar currentUser={this.state.currentUser.username} addMessage={this.addMessage} handleChange={this.handleChange} />
+        <ChatBar currentUser={currentUser.username} onNameChange={onNameChange} addMessage={addMessage} handleChange={handleChange} />
       </div>
     )
   };

@@ -74,7 +74,6 @@ body {
 
 .navbar {
   background: #a1d2e8;
-  border-bottom: 1px solid black;
   height: 60px;
   left: 0;
   padding: 0 10px;
@@ -88,7 +87,19 @@ body {
   display: block;
   float: left;
   font-weight: 700;
-  font-size: 300px;
+  font-size: 20px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+.navbar-usercount {
+  color: inherit;
+  display: block;
+  float: right;
+  font-weight: 700;
+  font-size: 20px;
   height: 60px;
   line-height: 60px;
   padding: 0 10px;
