@@ -1,4 +1,4 @@
-React Boilerplate
+ChattyApp!
 =====================
 
 A simple single page program using React and Web Sockets
