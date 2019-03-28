@@ -1,7 +1,7 @@
-React Boilerplate
+ChattyApp!
 =====================
 
-A minimal and light dev environment for ReactJS.
+A simple single page program using React and Web Sockets
 
 ### Usage
 
@@ -43,3 +43,6 @@ npm run lint
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* UUID
+* Express
+* WS
