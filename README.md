@@ -5,7 +5,7 @@ Lightweight single-page chat app built with ReactJS in Node. The client-side app
 
 ### ScreenShot
 
-!['Screenshot of Chatty Message App :)] (https://github.com/SarahMadro/chattyApp/blob/master/Screen%20Shot%202019-03-17%20at%205.01.05%20PM.png)
+!['Screenshot of Chatty Message App :)'] (https://github.com/SarahMadro/chattyApp/blob/master/Screen%20Shot%202019-03-17%20at%205.01.05%20PM.png)
 
 ### Dependencies
 
